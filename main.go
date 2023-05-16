@@ -30,9 +30,8 @@ func main() {
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
-
+	router.DELETE("/albums/:id", deleteAlbumByID)
 	router.Run("localhost:8080")
-
 }
 
 func getAlbums(c *gin.Context) {
@@ -66,4 +65,21 @@ func postAlbums(c *gin.Context) {
 
 	albums = append(albums, newAlbum)
 	c.IndentedJSON(http.StatusCreated, newAlbum)
+}
+
+func deleteAlbumByID(c *gin.Context) {
+	id := c.Param("id")
+	albums = remove(albums, id)
+	c.IndentedJSON(http.StatusOK, albums)
+}
+
+func remove(albums []album, id string) []album {
+	k := 0
+	for i, a := range albums {
+		if a.ID != id {
+			albums[k] = albums[i]
+			k++
+		}
+	}
+	return albums[0:k]
 }
