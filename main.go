@@ -12,7 +12,7 @@ import (
 type album struct {
 	ID     string  `json:"id"`
 	Title  string  `json:"title"`
-	Artist string  `json:"artists"`
+	Artist string  `json:"artist"`
 	Price  float64 `json:"price"`
 }
 
@@ -29,6 +29,7 @@ func main() {
 	// Whenever /albums endpoint is called, getAlbums function is invoked
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
+	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8080")
 
@@ -52,4 +53,17 @@ func getAlbumByID(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+}
+
+func postAlbums(c *gin.Context) {
+	// to add an album to albums
+	var newAlbum album
+
+	//binding request to add new album to newAlbum variable
+	if err := c.BindJSON(&newAlbum); err != nil {
+		return
+	}
+
+	albums = append(albums, newAlbum)
+	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
