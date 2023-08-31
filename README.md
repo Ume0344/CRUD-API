@@ -1,2 +1,2 @@
-# CRUD-API
-CRUD API in Golang using GIN Web FrameWork
+# CRUD-API Project
+A basic CRUD API project to learn Golang.
